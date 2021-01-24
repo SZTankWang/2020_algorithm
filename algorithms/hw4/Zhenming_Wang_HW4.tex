@@ -1,0 +1,322 @@
+\documentclass[11pt,twoside]{article}
+% \input{hwheader.tex}
+
+%\documentclass[11pt,twoside]{article}
+\usepackage[nonamelimits]{amsmath}
+\usepackage{amssymb, amsthm}
+
+\setlength{\oddsidemargin}{0 in}
+\setlength{\evensidemargin}{0 in}
+\setlength{\topmargin}{-0.6 in}
+\setlength{\textwidth}{6.5 in}
+\setlength{\textheight}{8.5 in}
+\setlength{\headheight}{0.5 in}
+\setlength{\headsep}{0.5 in}
+\setlength{\parindent}{0 in}
+\setlength{\parskip}{0.1 in}
+
+
+%%% SETS
+\newcommand\Z{\mbox{$\mathbb Z$}}
+\newcommand\N{\mbox{$\mathbb N$}}
+\newcommand\R{\mbox{$\mathbb R$}}
+\newcommand\F{\mbox{$\mathbb F$}}
+\def\B{\{0,1\}}
+\def\cond{\mid}
+
+%%% FUNCTIONS
+\providecommand\floor[1]{\lfloor#1\rfloor}
+\providecommand\ceil[1]{\lceil#1\rceil}
+\providecommand\blog[1]{\log_2\ceil{#1}}
+\providecommand\abs[1]{\lvert#1\rvert}
+\providecommand\bigabs[1]{\bigl\lvert#1\bigr\rvert}
+
+\def\co{{\rm co}}
+\def\avg{{\rm Avg}}
+\def\heur{{\rm Heur}}
+
+%%% THEOREM TYPE ENVIRONMENTS
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{exercise}{Exercise}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}[theorem]{Definition}
+
+
+
+%%% HEADINGS
+\newcommand{\homework}[1]{
+   \pagestyle{myheadings}
+   \thispagestyle{plain}
+   \newpage
+   \setcounter{page}{1}
+   \noindent
+   \classname \hfill \mbox{\updatedday} \\
+   \instname \hfill \mbox{\duedate}
+   \rule{6.5in}{0.5mm}
+   \vspace*{-0.1 in}
+}
+
+
+\newcommand{\problem}[1]{\section*{Problem #1}}
+
+
+\renewcommand{\labelenumi}{(\alph{enumi})}
+\renewcommand{\labelenumii}{(\roman{enumii})}
+
+%%% DEFINITIONS
+\def\classname{CSCI-SHU 220: Algorithms @ NYU Shanghai}
+
+
+%%% INSTRUCTIONS
+\raggedbottom 
+
+
+\usepackage[pdftex]{graphicx}
+\usepackage{pgf,tikz}
+\usetikzlibrary{shapes,arrows,automata}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset { %
+    language=C++,
+    backgroundcolor=\color{black!5}, % set backgroundcolor
+    basicstyle=\footnotesize,% basic font setting
+}
+
+\newcommand\includefa[1]{\begin{center}\includegraphics[scale=0.5]{#1}\end{center}}
+
+\def\updatedday{Last Updated: November 9, 2020}
+\def\duedate{Due Date: November 23, 2020, 11:00pm}
+
+
+\newenvironment{solution}{{\par\noindent\it Solution.}}{}
+
+\def\instname{Homework 4}
+
+\begin{document}
+\homework{4}
+
+You are allowed to discuss with others but not allow to use references other than the course notes and reference books. Please list your collaborators for each questions. Write your own solutions and make sure you understand them. 
+
+There are 55 marks in total (including the bonus). The full mark of this homework is 50.  
+
+Enjoy :). 
+
+\textit{Please specify the following information before submission}:
+\begin{itemize}
+    \item Your Name: Zhenming Wang%  (put your name here)
+    \item Your NetID: zw1806% (put your NetID here)
+    \item Collaborators: % (write down the names of your collaborators if any).
+\end{itemize}
+
+
+\problem{1: Subset sum [10 marks]}
+ Given a set $A$ of integers, devise an algorithm based on dynamic programming to determine whether $A$ can be partitioned into two subsets so that the sums of the elements in both subsets are equal. 
+	
+Example 1: with $A=\{1,2,3,6\}$ the answer is yes,
+	
+Example 2: with $A=\{1,2,6\}$ the answer is no.
+
+\begin{solution}
+\textbf{Please write down your solution to Problem 1 here.}\\
+To determine whether the original set $A$ could be partitioned into two subsets with equal sum, we could achieve this by finding a subset whose sum is equal to half of the whole set.\\
+We would use a 2-D DP table \textit{subset} of size $\text{length(A)}\times \text{sum(A)}$, and in each cell \textit{subset}[i][j] we store the result of whether there exists a subset in A[:i] whose sum equals to j, \textit{True} of \textit{False}. 
+$$\text{subset[i,j] = subset[i-1,j] or subset[i-1,j-$A_{i}$]}$$
+\begin{lstlisting}[mathescape]
+    def equalSub(A,S,n):
+        if S%2 != 0:
+            return False
+        else:
+            //divide the sum of the whole array
+            sub_sum = S // 2
+            
+            //intialize the DP table
+            subset = ([[False for i in range (sub_sum)+1] for j in range(n+1)])
+            
+            //when the sum is 0, then the answer is true
+            for i in range(n+1):
+                subset[i][0] = True
+            
+            //when the subset contains no element, 
+            //all the subset sum greater than 0 should have an answer False
+            for i in range(1, sub_sum+1):
+                subset[0][i] = False
+            //main loop 
+            for i in range(1,n+1):
+                for j in range(1,sub_sum+1):
+                    if A[i-1] <= j:
+                        subset[i][j] = (subset[i-1][j] or subset[i-1][j-A[i-1]])
+                    elif A[i-1]>j:
+                        subset[i][j] = subset[i-1][j]
+            
+            return subset[n][sub_sum]
+            
+\end{lstlisting}
+\end{solution}
+
+\problem{2: Knapsack [10 marks]}
+Assume that there are $n$ objects, and the $i$-th object weights $w_i>0$ kilograms and has value $v_i$. Here $n$ and $v_i$ are both positive integers with $n>v_i$. With a knapsack of capacity $W>0$ kilograms, design an algorithm to find the maximum total value of the objects with which we can fill the knapsack. You will get full marks if the algorithm is of complexity $O(n^3)$.
+
+\begin{solution}
+\textbf{Please write down your solution to Problem 2 here.}\\
+Since it's given that for each object who has value $v_{i}$, $n > v_{i}$, which means $$n > V, V= \textit{max}\left\{v_{i}\right\}$$
+The loose upper-bound value we could get from the set of $n$ objects is therefore $n^{2}$. So, we would use a 2-D DP table KS of size $n \times n^{2}$, with each cell \textit{KS}[i][v] represents the minimum weight we could use from objects set $\left\{A_{1}\cdots A_{i} \right\}$ to get to value $v$.\\
+$$\text{KS[i][v]}=\textit{min}\left\{
+\begin{aligned}
+& KS[i-1][v] \\
+& w_{i} + KS[i-1][v-v_{i}] \\
+\end{aligned}
+\right.$$
+After we filled all the cell in \textit{KS}, we perform a linear scan on \textit{KS}[n], and find the greatest $v$ that is less than $W$.
+\begin{lstlisting}[mathescape]
+    def knapsack(w,v,n,W):
+        
+        \\intialize table of size  $n\times n^2$
+        KS = [[0 for j in range($n^{2}+1$)] for i in range(n+1)]
+        
+        //with 0 objects, we could not reach any of the values greater than 0
+        for i in range(1,$n^{2}+1$):
+            KS[0][i] = float('inf')
+            
+        for i in range(1,n+1):
+            for j in range($n^{2}+1$):
+                if v[i-1] <= j:
+                    KS[i][j] = min(KS[i-1][j], w[i-1]+KS[i-1][j-v[i-1]])
+                else:
+                    KS[i][j] - KS[i-1][j]
+                    
+        \\solution lies in the $\textit{nth}$ row, so we traverse to find biggest v
+
+        for i in range($n^{2}$+1):
+            if KS[n][i] > W:
+                return i-1
+            else:
+                continue
+        
+\end{lstlisting}
+\end{solution}
+
+\problem{3: Sorting [10 marks]}
+Given a sequence of numbers, $A=(a_1,\dots,a_n)$, we will sort $A$ in increasing order. Assume that we can insert any element of $A$ into any position. Design an algorithm based on dynamic programming to find the minimum number of insertions that we need to sort $A$.
+
+Example: with $A=(2,3,5,1,4,7,6)$ we need $3$ insertions. First insert $1$ before $2$. Then insert $4$ between $3$ and $5$. Finally insert $7$ after $6$ (or alternatively insert $6$ before $7$).
+
+\begin{solution}
+\textbf{Please write down your solution to Problem 3 here.}\\\\
+We first observe that moving an element would not change the relative order of elements in the sequence other than the one being moved. In order to minimize the number of movements ( insertions ), we consider the \textit{longest non-decreasing subsequence}, and by only moving the element that is not in this sequence, it's trivial that we would get a sorted sequence, with all the elements that were already in the sequence have been sorted relative to each other. \\
+Therefore, to find the minimum number of insertions to sort $A$, it suffices to find the length of the longest non-decreasing sub-sequence, and compute the difference between the length of the sequence and the length of the longest non-decreasing sub-sequence. We would use a 1-D DP table \textit{L}to store the longest non-decreasing sub-sequence starting from A[i]. $$\text{L[i] = 1 +  $max\left\{L[j],j<i \leq n, A[i]\geq A[j] \right\}$}$$
+\begin{lstlisting}[mathescape]
+    def longestnds(A,n):
+        if n <= 1:
+            return n
+        else:
+            \\initiate DP table
+            DP = [1 for i in range(n)]
+            
+            for i in range(1,n):
+                for j in range(i):
+                    if A[i] $\geq$ A[j] and DP[i]<DP[j] + 1:
+                        A[i] = A[j] + 1
+            
+            return n-max(DP)
+                
+\end{lstlisting}
+\end{solution}
+
+\problem{4: Covering Set [10 marks]}
+Given an undirected graph $G = (V,E)$, a subset $S\subseteq V$ is a covering set if for every vertex $v\in V\setminus S$,
+there exists $u\in S$ such that $uv\in E$ (i.e. every vertex $v\in V\setminus S$ has a neighbor in $S$). We are interested in finding a covering set of minimum total weight, but this problem is NP-hard in general graphs. Show that this problem is easy in trees.
+\begin{itemize}
+	\item Input: A tree $T = (V, E)$ in the adjacency list representation, a weight $w_v$ for each vertex $v\in V$.
+	\item Output: A covering set $S\subseteq V$ that minimizes the total weight $\sum_{v\in S} w_{v}$.
+\end{itemize}
+Design an efficient algorithm to solve this problem. Prove the correctness and analyze the time complexity.
+\begin{solution}
+\textbf{Please write down your solution to Problem 4 here.}\\
+\textit{The collection of Subproblem}: for each vertex $v$ in the tree, consider  $W(v)$, that is $$\text{the minimal weighted covering set in the sub tree rooted at v}$$ and to determine $W(v)$, there are two cases: \begin{align*}
+    &\text{include $v$ in the covering set}\\
+    &\text{not including $v$ in the covering set}
+\end{align*}
+We build a DP table of size $n\times 2$, with $2$ columns named \textit{true} and \textit{false}, representing the weight of the minimal weight of the covering set in either of the two cases above.\\
+Base case: if v is a leaf; DP[v][true] = $w_{v}$,  DP[v][false] = $0$
+\begin{lstlisting}[mathescape,showstringspaces=false,linewidth=20cm]
+    DP = [0 for i in range(2)] for j in range(|V|)
+    
+    //first find the leaf node, and set their corresponding value in DP table
+    for i in range($V$):
+        if V[i] is not connected with any other node:
+            DP[i][0] = V[i].weight
+            DP[i][1] = 0
+    
+    //the parameters below should all be their index in the actual list of nodes
+    coveringSet(v):
+        for c in v's children:
+            coveringSet(c)
+        
+        
+        //if v included, then we choose the minimal one among whether to include
+        // v's children or not 
+        DP[v][0] = $w_{v}$ + sum for c in children(v) of min (DP[c][0], DP[c][1])
+        
+        
+        //if v is not included, we must include all of v's children
+        DP[v][1] = sum(DP[c][0] for c in v's children)
+        
+        if DP[v][0] < DP[v][1]:
+            add v to the covering vertex set
+        else:
+            for c in v's children:
+                add c to the covering vertex set
+\end{lstlisting}
+\begin{proof}
+Our algorithm works in a way from the leaf node back to the root node. For each node, there are two choices, include it or not. For the leaf nodes, we have filled in the two base cases in advance using a traversal. Now, with our base case ready, we could go back up from leaf nodes back all the way to the root.
+
+Consider the optimal solution W(v), the minimum total weight of a covering subset rooted at v. If we do not use v, then we would have to use $\sum_{\text{c in chlidren of v}} W(c)$, where $W(c)= \text{DP[c][0]}$, since we must use every c among the children of v, or we would have two adjacent level left not covered. If we use v, then we would look at each children c of v, and pick the minimal one among DP[c][0] and DP[c][1], and each value in the DP table is itself an optimal value, so we are still making the optimal decision based on the decision that we include v . After that, we would take the minimal one among DP[v][0] and DP[v][1], so we again obtain an optimal solution.
+\end{proof}
+
+\textit{Time Complexity}: The algorithm would take $O(|V|)$ time.\\  Finding the leaf nodes would take $O(|V|)$ time, and solve the problem using DP table would take $O(|V|)$ time, since each node is visited only when we consider their parent, so each node is visited constant time.  
+
+\end{solution}
+
+\problem{5: Selection [10 marks + 5 marks]}
+Let $x=(x_1,\dots,x_m)$ and $y=(y_1,\dots,y_k)$ be two \textit{sorted} sequences, i.e., they satisfy
+\begin{align}
+	x_1\leq x_2\leq \cdots \leq x_m, \ \ y_1\leq y_2\leq \cdots\leq y_k.
+\end{align}
+There are $\binom{m}{k}$ subsequences of $x$ of length $k$, and each subsequence has $k!$ rearrangements. Denote by $X$ the set of those rearrangements of all length-$k$ subsequences. Note that, for each element $x'=(x_{i_1},\dots,x_{i_k})$ of $X$, the sequence $x'$ might not be sorted, that is, it is possible that $x_{i_j}>x_{i_{j+1}}$ for some $j$. We can compute the squared Euclidean distance between $y$ and $x'$, 
+\begin{align}
+    d(y,x'):=\sum_{j=1}^k(y_j-x_{i_j})^2.
+\end{align}
+Consider the following optimization problem
+\begin{align}\label{eq:US}
+	\min\limits_{x'\in X}\ d(y,x').
+\end{align}
+\begin{enumerate}
+	\item (\textbf{Bonus}: 5 marks) Prove that there some element of $X$ which is an optimal solution to \eqref{eq:US} and is also a sorted sequence.
+	\item (10 marks) Design an algorithm based on dynamic programming to find an optimal solution to \eqref{eq:US} (not just the optimal value).
+\end{enumerate}
+
+
+\begin{solution}
+\textbf{Please write down your solution to Problem 5 here.}\begin{enumerate}\item
+\begin{proof}
+First, we would assume that there exists some optimal solution $X'$, such that $X'$ is not in an sorted fashion, which means, there exists at least one pair of local inversion $x_{i_{j}}\text{and}x_{i_{j+1}}$, such that $x_{i}{j}>x_{i}{j+1}$.
+Now, let us exchange the position of $x_{i_{j}}$ and $x_{i_{j+1}}$ for the sake of restoring the order. \begin{align*}
+    \text{Before exchange, original local sum of squared distance}& (y_{j+1}-x_{i_{j+1}})^{2} + (y_{j})^{2}\tag{equation 1}\\
+    \text{After exchange, local sum of squared distance}& (y_{j+1}-x_{i_{j}})^{2}+(y_{j}-x_{i_{j+1}})^{2}\tag{equation2}
+\end{align*}
+We take the difference between the two sums, and evetually reach at the following equation: $$\text{equation1 - equation2}= 2(x_{i_{j+1}}-x_{i_{j}})(y_{j}-y_{j+1}) > 0$$ Therefore, after swap, we obtain a better solution, so the sorted sequence is an optimal solution.
+\end{proof}
+\item
+we identify the following relation: $$\text{DP[i][j]} = min(DP[i-1][j], DP[i-1][j-1]+ d(x_{i},y_{i}))$$
+
+\end{enumerate}
+\end{solution}
+
+\end{document}

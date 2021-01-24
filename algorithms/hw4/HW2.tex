@@ -1,0 +1,217 @@
+\documentclass[11pt,twoside]{article}
+% \input{hwheader.tex}
+
+%\documentclass[11pt,twoside]{article}
+\usepackage[nonamelimits]{amsmath}
+\usepackage{amssymb, amsthm}
+
+\setlength{\oddsidemargin}{0 in}
+\setlength{\evensidemargin}{0 in}
+\setlength{\topmargin}{-0.6 in}
+\setlength{\textwidth}{6.5 in}
+\setlength{\textheight}{8.5 in}
+\setlength{\headheight}{0.5 in}
+\setlength{\headsep}{0.5 in}
+\setlength{\parindent}{0 in}
+\setlength{\parskip}{0.1 in}
+
+
+%%% SETS
+\newcommand\Z{\mbox{$\mathbb Z$}}
+\newcommand\N{\mbox{$\mathbb N$}}
+\newcommand\R{\mbox{$\mathbb R$}}
+\newcommand\F{\mbox{$\mathbb F$}}
+\def\B{\{0,1\}}
+\def\cond{\mid}
+
+%%% FUNCTIONS
+\providecommand\floor[1]{\lfloor#1\rfloor}
+\providecommand\ceil[1]{\lceil#1\rceil}
+\providecommand\blog[1]{\log_2\ceil{#1}}
+\providecommand\abs[1]{\lvert#1\rvert}
+\providecommand\bigabs[1]{\bigl\lvert#1\bigr\rvert}
+
+\def\co{{\rm co}}
+\def\avg{{\rm Avg}}
+\def\heur{{\rm Heur}}
+
+%%% THEOREM TYPE ENVIRONMENTS
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{exercise}{Exercise}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}[theorem]{Definition}
+
+
+
+%%% HEADINGS
+\newcommand{\homework}[1]{
+   \pagestyle{myheadings}
+   \thispagestyle{plain}
+   \newpage
+   \setcounter{page}{1}
+   \noindent
+   \classname \hfill \mbox{\updatedday} \\
+   \instname \hfill \mbox{\duedate}
+   \rule{6.5in}{0.5mm}
+   \vspace*{-0.1 in}
+}
+
+
+\newcommand{\problem}[1]{\section*{Problem #1}}
+
+
+\renewcommand{\labelenumi}{(\alph{enumi})}
+\renewcommand{\labelenumii}{(\roman{enumii})}
+
+%%% DEFINITIONS
+\def\classname{CSCI-SHU 220: Algorithms @ NYU Shanghai}
+
+
+%%% INSTRUCTIONS
+\raggedbottom 
+
+
+\usepackage[pdftex]{graphicx}
+\usepackage{pgf,tikz}
+\usetikzlibrary{shapes,arrows,automata}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset { %
+    language=C++,
+    backgroundcolor=\color{black!5}, % set backgroundcolor
+    basicstyle=\footnotesize,% basic font setting
+}
+
+\newcommand\includefa[1]{\begin{center}\includegraphics[scale=0.5]{#1}\end{center}}
+
+\def\updatedday{Last Updated: September 28, 2020}
+\def\duedate{Due Date: October 16, 2020, 11:00pm}
+\newenvironment{solution}{{\par\noindent\it Solution.}}{}
+
+\def\instname{Homework 2}
+
+\begin{document}
+\homework{2}
+
+You are allowed to discuss with others but not allow to use references other than the course notes and reference books. Please list your collaborators for each questions. Write your own solutions and make sure you understand them. 
+
+There are 65 marks in total (including the bonus). The full mark of this homework is 50.  
+
+Enjoy :). 
+
+\textit{Please specify the following information before submission}:
+\begin{itemize}
+    \item Your Name: Liangzu Peng%  (put your name here)
+    \item Your NetID: lp2528% (put your NetID here)
+    \item Collaborators: % (write down the names of your collaborators if any).
+\end{itemize}
+
+
+\problem{1: Searching [15 marks]}
+\begin{enumerate}
+    \item (5 marks) Consider the following \texttt{MysterySearch} algorithm.
+\begin{lstlisting}
+// The classic binary search algorithm that we know.
+int BinarySearch(int arr[], int low, int high, int x); 
+
+// The mystery search algorithm.
+int MysterySearch(int arr[], int n, int x) {
+  int low = 1; // arr[1] is the first element in arr[].
+  while (low <= n && arr[low] < x) {
+    low *= 2;
+  }
+  
+  return BinarySearch(arr, low/2, min(n, low), x);
+}
+\end{lstlisting}
+Assume that \texttt{x} can be found in the array \texttt{arr} at index $r$, that is, $\texttt{arr}[r]=\texttt{x}$. What is the time complexity of \texttt{MysterySearch} in terms of $r$?
+\item (5 marks) Given two sorted arrays $A$ and $B$, each of size $n$, devise an algorithm to find the $k$-th smallest element of among $A$ and $B$. You will get full marks if the algorithm is of complexity $O(\log k)$.
+\item (5 marks) Let there be a $n\times n$ matrix $(a_{i,j})_{1\leq i\leq n, 1\leq j\leq n}$ such that $a_{i,j}\leq a_{i+1,j}$ and $a_{i,j}\leq a_{i,j+1}$, that is, the elements of each row or column of the matrix is in increasing order. Devise an algorithm that takes as inputs the matrix $(a_{i,j})_{1\leq i\leq n, 1\leq j\leq n}$ of size $n\times n$ and a number $b$, and that outputs whether there is an element $a_{i,j}$ such that $a_{i,j}=b$ for some number $b$. You will get full marks if the algorithm is correct of complexity $O(n^{1.59})$.
+\end{enumerate}
+\begin{solution}
+\textbf{Please write down your solution to Problem 1 here.}
+\end{solution}
+
+\problem{2: Multiplication [10 marks]}
+\begin{enumerate}
+    \item (Matrix-vector multiplication) 
+Recursively define a sequence of matrices as follows.
+Let $H_0=1$ and for $k>0$ let 
+\begin{align}
+    H_k=
+    \begin{bmatrix}
+    H_{k-1} & H_{k-1}\\
+    H_{k-1} & -H_{k-1} 
+    \end{bmatrix}. 
+\end{align}
+As such, $H_k$ is of size $n\times n$ where $n=2^k$. Design an algorithm to compute the matrix-vector multiplication $H_k x$, where $x\in\{0,1\}^n$. You will get full marks if the algorithm is correct and takes $O(n\log n)$ integer multiplication and addition operations.
+\item (Polynomial multiplication) Given two polynomials $P(x) = a_nx^n + a_{n-1}x^{n-1} + ... + a_1x + a_0$ and $Q(x) = b_nx^n + b_{n-1}x^{n-1} + ... + b_1x + b_0$, provide an algorithm to multiply these two polynomials in $O(n^{\log_2 3}) = O(n^{1.59})$ word operations (i.e. each addition and multiplication in computing coefficients of $P\cdot Q(x)$ is considered one word operation).
+You can assume that $n + 1$ is a power of two.  State the algorithm clearly and explain its time complexity.
+\end{enumerate}
+\begin{solution}
+\textbf{Please write down your solution to Problem 2 here.}
+\end{solution}
+    
+\problem{3: Mergesort [10 marks]} 
+		\begin{enumerate}
+			\item (5 marks) Given four lists of $n$ numbers each, devise an $O(n\log n)$ algorithm to determine if there is any number common to all four lists.
+			\item (5 marks) Given an array $A[1,\dots,n]$, its subarray $A[i,\dots,j]$ is called a maximal increasing sequence (MIS) if and only if it is sorted and either of the following holds:
+			\begin{itemize}
+			    \item $i=1$ and $j=n$,
+			    \item $i> 1, j = n$, and $A[i-1]> A[i]$,
+			    \item $i=1, j< n$, and $A[j]>A[j+1]$,
+			    \item $i>1, j<n$, and $A[i-1]> A[i], A[j]>A[j+1]$.
+			\end{itemize}
+			Example: in the array $(3,1,2,4,-1,9,8)$, there are $4$ maximal increasing sequences say $(3), (1,2,4), (-1,9), (8)$.
+			
+			Consider the following version of mergesort. 
+\begin{lstlisting}
+// merge the sorted arrays B and C into the output array.
+int* merge(int B[], int C[]);
+
+int* mergesort2(int A[1,...,n]) { 
+    int MIS[];
+    int i = 1;
+    
+    Find j such that A[i,...,j] is a maximal increasing sequence.
+    MIS = A[i,...,j];
+    
+    while(j+1 <= n) {
+        Find k such that A[j+1,...,k] is a maximal increasing sequence.
+        MIS = merge(MIS, A[j+1,...,k];
+        j = k;
+    }
+    
+    return MIS;
+}
+\end{lstlisting}
+		What is the running time of \texttt{mergesort2} in terms of the array size and the number of maximal increasing sequences in the array?
+\end{enumerate}
+\begin{solution}
+\textbf{Please write down your solution to Problem 3 here.}
+\end{solution}
+		
+\problem{4: Counting inversions [15 marks + 10 marks]} 
+\begin{enumerate}
+    \item ($5$ marks) There are $n$ students and each student $i$ has 2 scores $x_i$ and $y_i$. Students $i$ and $j$ are friends if and only if $x_i<x_j$ and $y_i>y_j$. Devise an $O(n\log n)$ algorithm to count the number of pairs of friends.
+    \item ($10$ marks) Let there be an array of $2$D pairs $\big((x_1,y_1),\dots,(x_n,y_n) \big)$. With a fixed constant $y'$ a pair $(i,j)$ is called \textit{half-inverted} if $i<j$, $x_i>x_j$, and $y_i\geq y'>y_j$. Devise an algorithm that counts the number of half-inverted pairs. You will get full marks if your algorithm is correct of complexity no more than $O(n\log n)$.
+    \item (\textbf{Bonus}: 10 marks) A pair $(i,j)$ is inverted if $i<j, x_i>x_j$, and $y_i>y_j$. Devise an algorithm as efficient as possible that counts the number of inverted pairs.
+\end{enumerate}
+\begin{solution}
+\textbf{Please write down your solution to Problem 4 here.}
+\end{solution}
+
+
+\problem{5: Randomized binary search [Bonus: 5 marks]}
+In the binary search algorithm, it is typical to take the middle element of the (sub-)array of length $n$ as the pivot in each iteration. We can also choose uniformly at random an element in the (sub-)array as our pivot. Assume that randomly choosing such a pivot takes $\Theta(1)$ time. Prove that the expected running time of the randomized binary search algorithm is $O(\log n)$.
+\begin{solution}
+\textbf{Please write down your solution to Problem 5 here.}
+\end{solution}
+\end{document}

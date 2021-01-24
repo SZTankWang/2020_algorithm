@@ -1,0 +1,218 @@
+\documentclass[11pt,twoside]{article}
+% \input{hwheader.tex}
+
+%\documentclass[11pt,twoside]{article}
+\usepackage[nonamelimits]{amsmath}
+\usepackage{amssymb, amsthm}
+
+\setlength{\oddsidemargin}{0 in}
+\setlength{\evensidemargin}{0 in}
+\setlength{\topmargin}{-0.6 in}
+\setlength{\textwidth}{6.5 in}
+\setlength{\textheight}{8.5 in}
+\setlength{\headheight}{0.5 in}
+\setlength{\headsep}{0.5 in}
+\setlength{\parindent}{0 in}
+\setlength{\parskip}{0.1 in}
+
+
+%%% SETS
+\newcommand\Z{\mbox{$\mathbb Z$}}
+\newcommand\N{\mbox{$\mathbb N$}}
+\newcommand\R{\mbox{$\mathbb R$}}
+\newcommand\F{\mbox{$\mathbb F$}}
+\def\B{\{0,1\}}
+\def\cond{\mid}
+
+%%% FUNCTIONS
+\providecommand\floor[1]{\lfloor#1\rfloor}
+\providecommand\ceil[1]{\lceil#1\rceil}
+\providecommand\blog[1]{\log_2\ceil{#1}}
+\providecommand\abs[1]{\lvert#1\rvert}
+\providecommand\bigabs[1]{\bigl\lvert#1\bigr\rvert}
+
+\def\co{{\rm co}}
+\def\avg{{\rm Avg}}
+\def\heur{{\rm Heur}}
+
+%%% THEOREM TYPE ENVIRONMENTS
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{exercise}{Exercise}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}[theorem]{Definition}
+
+
+
+%%% HEADINGS
+\newcommand{\homework}[1]{
+   \pagestyle{myheadings}
+   \thispagestyle{plain}
+   \newpage
+   \setcounter{page}{1}
+   \noindent
+   \classname \hfill \mbox{\updatedday} \\
+   \instname \hfill \mbox{\duedate}
+   \rule{6.5in}{0.5mm}
+   \vspace*{-0.1 in}
+}
+
+
+\newcommand{\problem}[1]{\section*{Problem #1}}
+
+
+\renewcommand{\labelenumi}{(\alph{enumi})}
+\renewcommand{\labelenumii}{(\roman{enumii})}
+
+%%% DEFINITIONS
+\def\classname{CSCI-SHU 220: Algorithms @ NYU Shanghai}
+
+
+%%% INSTRUCTIONS
+\raggedbottom 
+
+
+\usepackage[pdftex]{graphicx}
+\usepackage{pgf,tikz}
+\usetikzlibrary{shapes,arrows,automata}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset { %
+    language=C++,
+    backgroundcolor=\color{black!5}, % set backgroundcolor
+    basicstyle=\footnotesize,% basic font setting
+}
+
+\newcommand\includefa[1]{\begin{center}\includegraphics[scale=0.5]{#1}\end{center}}
+
+\def\updatedday{Last Updated: September 14, 2020}
+\def\duedate{Due Date: September 28, 2020, 11:00pm}
+\newenvironment{solution}{{\par\noindent\it Solution.}}{}
+
+\def\instname{Homework 1}
+
+\begin{document}
+\homework{1}
+
+You are allowed to discuss with others but not allow to use references other than the course notes and reference books. Please list your collaborators for each questions. Write your own solutions and make sure you understand them. 
+
+There are 60 marks in total (including the bonus). The full mark of this homework is 50.  
+
+Enjoy :). 
+
+\textit{Please specify the following information before submission}:
+\begin{itemize}
+    \item Your Name: Liangzu Peng%  (put your name here)
+    \item Your NetID: lp2528% (put your NetID here)
+    \item Collaborators: % (write down the names of your collaborators if any).
+\end{itemize}
+
+
+\problem{1: Asymptotics [5 marks]} 
+Arrange the following functions in order of increasing growth rate, with $g(n)$ following $f(n)$ in your list if and only if $f(n)=O(g(n))$.
+			%Rank the following functions by order of growth; that is, find a rearrangement $f_1',\dots,f_7'$ of the following functions $f_1,\dots,f_7$ satisfying $f_1'=\Omega(f_2'),\dots,f_6'=\Omega(f_7')$. [5 marks]
+			\begin{itemize}
+				\item $\log_2\log_2 n$
+				\item $n^3$
+			%	\item $(\log_2 n)^2$
+				\item $n^{\log_2 n}$
+				\item $\sqrt{\log_2 n}$
+				\item $n^{1/\log_2 n}$
+			%	\item $n^2$
+			\end{itemize}
+% 			\item Prove or disprove: [5 marks]
+% 			\begin{enumerate}
+% 				\item $f(n)=O(g(n)),g(n)=o(h(n))\Rightarrow f(n)=o(h(n))$.
+% 				\item $f(n)=O(g(n)),g(n)=\Omega(h(n))\Rightarrow f(n)=\Omega(h(n))$.
+% 			\end{enumerate}
+\begin{solution}
+\textbf{Please write down your solution to Problem 1 here.}
+\end{solution}
+
+
+
+\problem{2: Solving recurrences [15 marks]}
+		\begin{enumerate}
+			\item (10 marks) Find an asymptotically tight bound of the following recurrence relations. Justify
+your answers by naming a particular case of the Master method, or by iterating the
+recurrence, or by using the substitution method. Assume that the base cases can be solved in constant time. 
+			\begin{enumerate}
+				\item $T(n)=2T(n/4)+2n$
+		%		\item $T(n)=3T(n/2)+\sqrt{n}$
+				\item $T(n)=T(n-2)+n^2$
+				\item $T(n)=2T(2n/3)+T(n/3)+n^2$
+			\end{enumerate}
+			\item (5 marks)
+				Consider the recurrence relation $C_0=0$ and 
+				\begin{align*}
+				C_n=n+1+\frac{2}{n}\sum_{k=0}^{n-1}C_k.
+				\end{align*}
+				Find an explicit formula for $C_n$. 
+		\end{enumerate}
+\begin{solution}
+\textbf{Please write down your solution to Problem 2 here.}
+\end{solution}
+
+
+\problem{3: Fibonacci-3 [10 marks]}
+Consider the recurrence relation $F_{n+3}=F_{n+2}+F_{n+1}+F_{n}$, with the initial state $F_0=0,F_1=0,F_2=1$.
+\begin{enumerate}
+	\item Prove that	
+	$$\begin{pmatrix} F_{n} \\ F_{n+1}\\ F_{n+2} \end{pmatrix} = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1\\ 1 & 1 & 1 \end{pmatrix}^n \cdot \begin{pmatrix} F_{0} \\ F_1 \\ F_2 \end{pmatrix}.$$	
+	\item So, in order to compute $F_n$, it suffices to raise this $3\times 3$ matrix, called $X$, to the $n$th power. Show that $O(\log{n})$ matrix multiplications suffice for computing $X^n$.
+\end{enumerate}
+\begin{solution}
+\textbf{Please write down your solution to Problem 3 here.}
+\end{solution}
+
+\problem{4: Recurrences in programs [10 marks]}
+Consider the following two programs:
+\begin{lstlisting}
+int F(int x) {
+  assert(x>=1);
+  
+  if (x == 1 || x == 2) 
+    return 1;
+  else
+    return 2*F(x-1) - F(x-2);
+}
+
+void Hanoi(int disk, int source, int dest, int spare) {
+  if (disk == 1) {
+    return;
+  } 
+  else {
+    Hanoi(disk - 1, source, spare, dest);
+    Hanoi(disk - 1, spare, dest, source);
+  }
+}
+\end{lstlisting}
+\begin{enumerate}
+    \item How many times is the function \texttt{F} is called when invoking \texttt{F(n)} with $n\geq 1$? 
+    \item How many times is the function \texttt{Hanoi} called when invoking \texttt{Hanoi(n,0,0,0)} with $n\geq 1$?
+\end{enumerate}
+
+\begin{solution}
+\textbf{Please write your solution to Problem 4 here.}
+\end{solution}
+
+\problem{5: Summations [10 marks + 10 marks]}
+\begin{enumerate}
+    \item (10 marks) Let us be given three sequences of integers, say $A,B$, and $C$, each of length $n$. Devise an algorithm to find whether there are three numbers $a\in A$ and $b\in B$ and $c\in C$ such that $a+b+c=0$. You will get full marks if the algorithm is of $O(n^2)$ complexity and it is proven to be correct.
+    
+    \item \textbf{(Bonus: 10 marks)} Let us be given four sequences of integers, say $A,B,C$, and $D$, each of length $n$. Devise an algorithm to find whether there are four numbers $a\in A$ and $b\in B$ and $c\in C$ and $d\in D$ such that $a+b+c+d=0$. You will get full marks if the algorithm is of $O(n^2\log n)$ complexity and it is proven to be correct. 
+\end{enumerate}
+\begin{solution}
+\textbf{Please write down your solution to Problem 5 here.}
+\end{solution}
+
+\end{document}
+
+
+
